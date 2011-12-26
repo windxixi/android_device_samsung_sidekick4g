@@ -22,10 +22,13 @@
 #include <stdint.h>
 #include <string.h>
 #include <errno.h>
+#include <unistd.h>
 #include <fcntl.h>
 #include <pthread.h>
+
 #include <sys/ioctl.h>
 #include <sys/types.h>
+
 #include <hardware/lights.h>
 
 

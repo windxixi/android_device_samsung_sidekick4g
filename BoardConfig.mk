@@ -52,23 +52,28 @@ BOARD_KERNEL_CMDLINE := console=ttyFIQ0 no_console_suspend
 BOARD_KERNEL_BASE := 0x30000000
 BOARD_PAGE_SIZE := 0x00001000
 # fix this up by examining /proc/mtd on a running device
-BOARD_BOOTIMAGE_PARTITION_SIZE := 0x00380000
+BOARD_BOOTIMAGE_PARTITION_SIZE := 7096912	
+#0x006c4a50	#0x00380000
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x00480000
-BOARD_SYSTEMIMAGE_PARTITION_SIZE := 0x08c60000
-BOARD_USERDATAIMAGE_PARTITION_SIZE := 0x105c0000
+BOARD_SYSTEMIMAGE_PARTITION_SIZE := 392691712	
+#0x17680000 	#392691712
+# user data should be 0x20480000
+BOARD_USERDATAIMAGE_PARTITION_SIZE := 274464768	
+#0x105c0000
 BOARD_FLASH_BLOCK_SIZE := 131072
-#BOARD_PROVIDES_BOOTMODE := true
+BOARD_PROVIDES_BOOTMODE := true
 
 # recovery
 TARGET_RECOVERY_INITRC := device/samsung/aries-common/recovery.rc
 BOARD_CUSTOM_RECOVERY_KEYMAPPING:= ../../device/samsung/sidekick4g/recovery_ui.c
-TARGET_USERIMAGES_USE_EXT4 := true
+#TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_UMS_LUNFILE := /sys/devices/platform/s3c-usbgadget/gadget/lun0/file
 BOARD_HAS_LARGE_FILESYSTEM := true
 
 # Releasetools
-TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT := ./device/samsung/aries-common/releasetools/aries_ota_from_target_files
-TARGET_RELEASETOOL_IMG_FROM_TARGET_SCRIPT := ./device/samsung/aries-common/releasetools/aries_img_from_target_files
+#TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT := ./device/samsung/aries-common/releasetools/aries_ota_from_target_files
+#TARGET_RELEASETOOL_IMG_FROM_TARGET_SCRIPT := ./device/samsung/aries-common/releasetools/aries_img_from_target_files
+TARGET_CUSTOM_RELEASETOOL := ./device/samsung/sidekick4g/releasetools/squisher
 
 # Camera
 USE_CAMERA_STUB := false
