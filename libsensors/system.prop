@@ -1,0 +1,45 @@
+#
+# system.prop for smdkc110
+#
+
+rild.libpath=/system/lib/librilswitch.so
+rilswitch.vendorlibpath=/system/lib/libsec-ril.so
+rilswitch.ganlibpath=/system/lib/libganril.so
+rild.libargs=-d /dev/ttyS0
+
+ro.sf.lcd_density=240
+
+# Default network type.
+# 3 -> GSM/WCDMA (auto mode, according to PRL)
+ro.telephony.default_network=3
+
+
+wifi.interface = eth0
+#wifi.dhcpinterface eth0
+
+# Time between scans in seconds. Keep it high to minimize battery drain.
+# This only affects the case in which there are remembered access points,
+# but none are in range.
+wifi.supplicant_scan_interval = 30
+
+# This is a high density device with more memory, so larger vm heaps for it.
+dalvik.vm.heapsize=40m
+
+# Forbid format of these partitions in mount menu :
+# ro.cwm.forbid_format=/misc,/boot,/recovery,/pds,/system
+
+# BatteryLight while charging, enabled by default.
+ro.battery_light=true
+
+# declare we're using Usb.apk
+ro.usb.use_custom_service=1
+
+# use 1% battery steps
+ro.product.use_charge_counter=1
+
+# Shutter sound enabled
+persist.sys.camera-mute=1
+
+
+
+
