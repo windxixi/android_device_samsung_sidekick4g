@@ -39,7 +39,8 @@ ro.product.use_charge_counter=1
 
 # Shutter sound enabled
 persist.sys.camera-mute=1
-
+net.dns1=8.8.8.8
+net.dns2=8.8.4.4
 
 
 
