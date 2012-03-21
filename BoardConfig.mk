@@ -37,17 +37,21 @@ TARGET_NO_RADIOIMAGE := false
 #TARGET_BOOTLOADER_BOARD_NAME := aries
 #TARGET_BOOTLOADER_BOARD_NAME := SGH-T839
 TARGET_BOOTLOADER_BOARD_NAME := s5pc110
+BOARD_USES_FROYO_GRALLOC := true
+
 
 # Connectivity - Wi-Fi
-WPA_SUPPLICANT_VERSION 	    := VER_0_6_X
 BOARD_WPA_SUPPLICANT_DRIVER := WEXT
-BOARD_WLAN_DEVICE 	    := bcm4329
-WIFI_FIRMWARE_LOADER        := "wlan_loader"
-WIFI_DRIVER_MODULE_PATH     := "/lib/modules/dhd.ko"
-WIFI_DRIVER_FW_STA_PATH     := "/system/etc/wifi/bcm4329_sta.bin"
-#WIFI_DRIVER_FW_AP_PATH      := "/vendor/firmware/fw_bcm4329_apsta.bin"
-WIFI_DRIVER_MODULE_NAME     :=  "dhd"
-WIFI_DRIVER_MODULE_ARG      :=  "firmware_path=/system/etc/wifi/bcm4329_sta.bin nvram_path=/system/etc/wifi/nvram_net.txt dhd_watchdog_ms=10 dhd_poll=1"
+WPA_SUPPLICANT_VERSION := VER_0_6_X
+WIFI_DRIVER_FW_STA_PATH := "/system/etc/wifi/bcm4329_sta.bin"
+WIFI_DRIVER_FW_AP_PATH := "/system/etc/wifi/bcm4329_aps.bin"
+BOARD_WLAN_DEVICE := bcm4329
+WIFI_DRIVER_MODULE_PATH := "/lib/modules/dhd.ko"
+WIFI_DRIVER_MODULE_ARG := "firmware_path=/system/etc/wifi/bcm4329_sta.bin nvram_path=/system/etc/wifi/nvram_net.txt dhd_watchdog_ms=10 dhd_poll=1"
+WIFI_DRIVER_MODULE_NAME := "dhd"
+WIFI_IFACE_DIR  :=  "/data/misc/wifi"
+CONFIG_DRIVER_WEXT := true
+BOARD_WEXT_NO_COMBO_SCAN := true
 
 # kernel 
 TARGET_PREBUILT_KERNEL := device/samsung/sidekick4g/kernel
@@ -67,7 +71,7 @@ BOARD_FLASH_BLOCK_SIZE := 131072
 BOARD_PROVIDES_BOOTMODE := true
 
 # recovery
-TARGET_RECOVERY_INITRC := device/samsung/sidekick4g/recovery.rc
+TARGET_RECOVERY_INITRC := device/samsung/aries-common/recovery.rc
 BOARD_CUSTOM_RECOVERY_KEYMAPPING:= ../../device/samsung/sidekick4g/recovery_ui.c
 #TARGET_USERIMAGES_USE_EXT4 := true
 BOARD_UMS_LUNFILE := /sys/devices/platform/s3c-usbgadget/gadget/lun0/file
@@ -90,6 +94,7 @@ endif
 
 
 
+
 # Graphics
 BOARD_EGL_CFG := device/samsung/sidekick4g/egl.cfg
 BOARD_NO_RGBX_8888 := true
@@ -99,12 +104,15 @@ TARGET_LIBAGL_USE_GRALLOC_COPYBITS := true
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_BCM := true
 
-# Audio
-TARGET_PROVIDES_LIBAUDIO := true
+# Video Devices
+BOARD_USES_OVERLAY := true
+BOARD_V4L2_DEVICE := /dev/video1
+BOARD_CAMERA_DEVICE := /dev/video0
+BOARD_SECOND_CAMERA_DEVICE := /dev/video2
 # Mass Storage
 BOARD_USE_USB_MASS_STORAGE_SWITCH := true
 
 # GPS
 BOARD_USES_GPSSHIM := true
-
+BOARD_NEEDS_CUTILS_LOG := true
 

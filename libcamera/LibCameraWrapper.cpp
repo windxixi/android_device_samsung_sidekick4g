@@ -47,7 +47,7 @@ static const int CAMERA_CMD_SET_TOUCH_AF = 1105;
 static void ensureLibOpened()
 {
     if (g_libHandle == NULL) {
-        g_libHandle = ::dlopen("libcamera.so", RTLD_NOW);
+        g_libHandle = ::dlopen("libsamsungcamera.so", RTLD_NOW);
         if (g_libHandle == NULL) {
             assert(0);
             LOGE("dlopen() error: %s\n", dlerror());

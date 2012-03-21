@@ -29,7 +29,7 @@
 
 /*****************************************************************************/
 Smb380Sensor::Smb380Sensor()
-    : SensorBase(NULL, "accelerometer"),
+    : SensorBase(NULL, "accelerometer_sensor"),
       mEnabled(0),
 
       mInputReader(4),

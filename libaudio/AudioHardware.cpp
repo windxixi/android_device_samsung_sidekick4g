@@ -169,12 +169,9 @@ void AudioHardware::loadRILD(void)
                               dlsym(mSecRilLibHandle, "SetCallVolume");
         setCallAudioPath = (int (*)(HRilClient, AudioPath))
                               dlsym(mSecRilLibHandle, "SetCallAudioPath");
-        setCallClockSync = (int (*)(HRilClient, SoundClockCondition))
-                              dlsym(mSecRilLibHandle, "SetCallClockSync");
 
         if (!openClientRILD  || !disconnectRILD   || !closeClientRILD ||
-            !isConnectedRILD || !connectRILD      ||
-            !setCallVolume   || !setCallAudioPath || !setCallClockSync) {
+            !isConnectedRILD || !connectRILD     ) {
             LOGE("Can't load all functions from libsecril-client.so");
 
             dlclose(mSecRilLibHandle);

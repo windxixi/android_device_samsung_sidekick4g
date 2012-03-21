@@ -28,6 +28,8 @@ adb pull /system/lib/libsecril-client.so ../../../$MANUFACTURER/$DEVICE/propriet
 adb pull /system/lib/libsec-ril.so ../../../$MANUFACTURER/$DEVICE/proprietary
 adb pull /system/bin/rild ../../../$MANUFACTURER/$DEVICE/proprietary
 adb pull /system/lib/libcamera.so ../../../$MANUFACTURER/$DEVICE/proprietary/libsamsungcamera.so 
+adb pull /system/lib/librilswitch.so ../../../$MANUFACTURER/$DEVICE/proprietary/librilswitch.so 
+
 
 # aries-common
 adb pull /system/bin/pvrsrvinit ../../../$MANUFACTURER/$COMMON/proprietary

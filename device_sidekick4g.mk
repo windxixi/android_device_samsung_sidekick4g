@@ -69,7 +69,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
 	device/samsung/sidekick4g/init.smdkc110.rc:root/init.smdkc110.rc \
 	device/samsung/sidekick4g/lpm.rc:root/lpm.rc \
-	device/samsung/sidekick4g/ueventd.aries.rc:root/ueventd.aries.rc \
+	device/samsung/sidekick4g/ueventd.smdkc110.rc:root/ueventd.smdkc110.rc \
 	device/samsung/sidekick4g/setupenv.sh:recovery/root/sbin/setupenv.sh	
 	
 # Prebuilt kl keymaps
@@ -107,13 +107,13 @@ PRODUCT_PACKAGES += \
 	libOMX.SEC.M4V.Encoder.s5pc110 \
 	libOMX.SEC.AVC.Encoder.s5pc110 \
 	libaudio
+	#libaudio
 
 # Misc other modules
 PRODUCT_PACKAGES += \
 	sensors.s5pc110\
 	lights.s5pc110 \
 	overlay.s5pc110 
-
 	#copybit.s5pc110 \
 
 # Libs
@@ -136,8 +136,8 @@ PRODUCT_PACKAGES += \
 
 # Device-specific packages
 PRODUCT_PACKAGES += \
-	librs_jni \
-	FM 
+	librs_jni 
+
 
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
