@@ -393,7 +393,7 @@ status_t AudioHardware::setMode(int mode)
                 if (ctl != NULL) {
                     LOGV("setMode() reset Playback Path to SPK");
                     TRACE_DRIVER_IN(DRV_MIXER_SEL)
-                    mixer_ctl_select(ctl, "SPK");
+                    mixer_ctl_select(ctl, "RCV");
                     TRACE_DRIVER_OUT
                 }
             }
@@ -438,9 +438,7 @@ status_t AudioHardware::setMicMute(bool state)
         if (mMicMute != state) {
             mMicMute = state;
             // in call mute is handled by RIL
-            if (mMode != AudioSystem::MODE_IN_CALL) {
                 spIn = getActiveInput_l();
-            }
         }
     }
 
@@ -751,9 +749,18 @@ status_t AudioHardware::setIncallPath_l(uint32_t device)
                 LOGE_IF(ctl == NULL, "setIncallPath_l() could not get mixer ctl");
                 if (ctl != NULL) {
                     LOGV("setIncallPath_l() Voice Call Path, (%x)", device);
+            const char *router = getVoiceRouteFromDevice(device);
+            TRACE_DRIVER_IN(DRV_MIXER_SEL)
+            mixer_ctl_select(ctl,router);
+            TRACE_DRIVER_OUT
+            if (router == (const char *)"SPK" || router == (const char *)"RCV") {
+                struct mixer_ctl *ctlMic = mixer_get_control(mMixer, "MIC Path", 0);
+                if (ctlMic != NULL ) {
                     TRACE_DRIVER_IN(DRV_MIXER_SEL)
                     mixer_ctl_select(ctl, getVoiceRouteFromDevice(device));
                     TRACE_DRIVER_OUT
+                }
+            	}
                 }
             }
         }
@@ -855,11 +862,8 @@ const char *AudioHardware::getOutputRouteFromDevice(uint32_t device)
         if (mMode == AudioSystem::MODE_RINGTONE) return "RING_SPK";
         else return "SPK";
     case AudioSystem::DEVICE_OUT_WIRED_HEADPHONE:
-        if (mMode == AudioSystem::MODE_RINGTONE) return "RING_NO_MIC";
-        else return "HP_NO_MIC";
     case AudioSystem::DEVICE_OUT_WIRED_HEADSET:
-        if (mMode == AudioSystem::MODE_RINGTONE) return "RING_HP";
-        else return "HP";
+        return "HP";
     case (AudioSystem::DEVICE_OUT_SPEAKER|AudioSystem::DEVICE_OUT_WIRED_HEADPHONE):
     case (AudioSystem::DEVICE_OUT_SPEAKER|AudioSystem::DEVICE_OUT_WIRED_HEADSET):
         if (mMode == AudioSystem::MODE_RINGTONE) return "RING_SPK_HP";
@@ -879,24 +883,11 @@ const char *AudioHardware::getVoiceRouteFromDevice(uint32_t device)
     case AudioSystem::DEVICE_OUT_EARPIECE:
         return "RCV";
     case AudioSystem::DEVICE_OUT_SPEAKER:
+    case (AudioSystem::DEVICE_OUT_EARPIECE|AudioSystem::DEVICE_OUT_SPEAKER):
         return "SPK";
     case AudioSystem::DEVICE_OUT_WIRED_HEADPHONE:
     case AudioSystem::DEVICE_OUT_WIRED_HEADSET:
-        switch (mTTYMode) {
-        case TTY_MODE_VCO:
-            return "TTY_VCO";
-        case TTY_MODE_HCO:
-            return "TTY_HCO";
-        case TTY_MODE_FULL:
-            return "TTY_FULL";
-        case TTY_MODE_OFF:
-        default:
-            if (device == AudioSystem::DEVICE_OUT_WIRED_HEADPHONE) {
-                return "HP_NO_MIC";
-            } else {
                 return "HP";
-            }
-        }
     case AudioSystem::DEVICE_OUT_BLUETOOTH_SCO:
     case AudioSystem::DEVICE_OUT_BLUETOOTH_SCO_HEADSET:
     case AudioSystem::DEVICE_OUT_BLUETOOTH_SCO_CARKIT:
@@ -909,7 +900,7 @@ const char *AudioHardware::getVoiceRouteFromDevice(uint32_t device)
 const char *AudioHardware::getInputRouteFromDevice(uint32_t device)
 {
     if (mMicMute) {
-        return "MIC OFF";
+        return "Off";
     }
 
     switch (device) {
@@ -918,7 +909,7 @@ const char *AudioHardware::getInputRouteFromDevice(uint32_t device)
     case AudioSystem::DEVICE_IN_WIRED_HEADSET:
         return "Hands Free Mic";
     case AudioSystem::DEVICE_IN_BLUETOOTH_SCO_HEADSET:
-        return "BT Sco Mic";
+            return "BT";
 #ifdef HAVE_FM_RADIO
     case AudioSystem::DEVICE_IN_FM_RX:
         return "FM Radio";
@@ -926,8 +917,18 @@ const char *AudioHardware::getInputRouteFromDevice(uint32_t device)
         return "FM Radio A2DP";
 #endif
     default:
-        return "MIC OFF";
+        return "OFF";
     }
+}
+const char *AudioHardware::getMicPathFromDevice()
+{
+    uint32_t device = mOutput->device();
+    if (AudioSystem::DEVICE_OUT_SPEAKER & device)
+        return "Sub Mic";
+    else if (AudioSystem::DEVICE_OUT_EARPIECE & device)
+        return "Main Mic";
+    else
+        return "Sub Mic";
   }
 
 uint32_t AudioHardware::getInputSampleRate(uint32_t sampleRate)
@@ -1545,6 +1546,13 @@ status_t AudioHardware::AudioStreamInALSA::open_l()
     }
 
     if (mHardware->mode() != AudioSystem::MODE_IN_CALL) {
+        struct mixer_ctl *ctlMic = mixer_get_control(mMixer, "MIC Path", 0);
+        if (ctlMic != NULL ) {
+            TRACE_DRIVER_IN(DRV_MIXER_SEL)
+            mixer_ctl_select(ctlMic , mHardware->getMicPathFromDevice());
+            TRACE_DRIVER_OUT
+        }
+    
         const char *route = mHardware->getInputRouteFromDevice(mDevices);
         LOGV("read() wakeup setting route %s", route);
         if (mRouteCtl) {
