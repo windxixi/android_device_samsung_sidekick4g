@@ -35,6 +35,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	ro.build.changelist=1035695 \
 	ro.tether.denied=false \
 	ro.com.android.dataroaming=true \
+        ro.telephony.ril_class=samsung \
 	windowsmgr.max_events_per_sec=60 \
 	windowsmgr.support_rotation_270=true \
 	keyinputqueue.use_finger_id=true \
